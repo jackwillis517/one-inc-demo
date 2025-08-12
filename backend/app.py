@@ -30,12 +30,13 @@ def stream_styles(prompt):
 
         for chunk in stream:
             if flag.is_set():
-                yield f"\n"
+                f"\n\n"
                 break
             if chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
 
-        yield f"\n"
+    yield f"\n"
+
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -50,7 +51,7 @@ def cancel():
     return {"status": "canceled"}
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True)
 
 
 # if __name__ == "__main__":

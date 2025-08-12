@@ -25,11 +25,6 @@ export function useStreamer(url, cancelUrl) {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-
-          console.log("Chunk raw length:", value.length);
-          const chunkText = decoder.decode(value, { stream: true });
-          console.log("Received chunk:", JSON.stringify(chunkText));
-
           setOutput((val) => val + decoder.decode(value, { stream: true }));
         }
       } catch (err) {

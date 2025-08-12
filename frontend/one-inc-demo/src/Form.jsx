@@ -61,7 +61,6 @@ export default function Form() {
           </div>
         )}
       </div>
-
       <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
         <input
           type="text"
