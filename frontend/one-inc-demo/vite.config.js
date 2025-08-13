@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      // Proxy all requests starting with /api to the backend server
       "/api": {
         target: "http://localhost:5000",
         changeOrigin: true,
@@ -15,5 +14,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+  },
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    setupFiles: "./vitest.setup.js",
   },
 });

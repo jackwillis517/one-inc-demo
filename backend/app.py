@@ -14,9 +14,9 @@ styles=["Professional", "Casual", "Polite", "Social-media"]
 
 flag = threading.Event()
 
-def stream_styles(prompt):
+def openai_stream(prompt):
     for style in styles:
-        if flag.is_set():  # Halt generation if cancellation requested
+        if flag.is_set():  # Stop stream if cancel request sent
             break
 
         yield f"\n\n{style}:\n"
@@ -42,8 +42,7 @@ def stream_styles(prompt):
 def generate():
     flag.clear()
     prompt = request.json.get("prompt", "")
-    print(prompt)
-    return Response(stream_styles(prompt), mimetype="text/plain")
+    return Response(openai_stream(prompt), mimetype="text/plain")
 
 @app.route("/cancel", methods=["POST"])
 def cancel():
@@ -52,10 +51,3 @@ def cancel():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, threaded=True)
-
-
-# if __name__ == "__main__":
-#     promt="Hey guys, let's huddle about AI."
-
-#     for chunk in stream_styles(promt):
-#         print(chunk, end="", flush=True)

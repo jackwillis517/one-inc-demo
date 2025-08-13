@@ -10,14 +10,14 @@ export default function Form() {
     "/api/cancel"
   );
 
-  // Update currentMessage as output grows which comes from useStreamer
+  // Update currentMessage as chunks come from useStreamer
   useEffect(() => {
     if (isLoading) {
       setCurrentMessage(output);
     }
   }, [output, isLoading]);
 
-  // When stream ends, save currentMessage and clear it
+  // When stream ends (when isLoading changes) save the currentMessage to messages state and clear it
   useEffect(() => {
     if (!isLoading && currentMessage) {
       setMessages((prev) => [...prev, currentMessage]);
@@ -25,7 +25,7 @@ export default function Form() {
     }
   }, [isLoading, currentMessage]);
 
-  // When a prompt is submitted in the form add the users message to the messages state
+  // When a prompt is submitted in the form add the users message to the messages state and process the prompt
   const handleSubmit = (e) => {
     e.preventDefault();
     setMessages((prev) => [...prev, prompt]);
@@ -62,6 +62,7 @@ export default function Form() {
         )}
       </div>
       <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
+        {/* Disable the input if useStreamer is loading chunks */}
         <input
           type="text"
           value={prompt}
@@ -70,6 +71,7 @@ export default function Form() {
           placeholder="Professional, Casual, Polite, or Something for the Socials..."
           disabled={isLoading}
         />
+        {/* If the userStreamer isn't loading render the submit button otherwise render the cancel button */}
         {!isLoading ? (
           <button
             type="submit"
